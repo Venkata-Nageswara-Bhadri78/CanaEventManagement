@@ -1,138 +1,363 @@
-import React from 'react';
-import { 
-  Instagram, Facebook, Youtube, Twitter, Linkedin, 
-  Mail, Phone, MapPin, Send, ArrowRight, ShieldCheck 
-} from 'lucide-react';
+import { useState, useEffect, useRef } from "react";
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
+// 🖼️ Replace with your actual gallery images from src/assets/images/gallery/
+// import g1 from '../assets/images/gallery/g1.jpg'  ...etc
+// Then in GALLERY_IMAGES: replace gradient with:  image: g1
 
-  const serviceLinks = [
-    "Grand Marriages", "Corporate Galas", "College Fests", 
-    "Live Concerts", "Product Launches", "Birthday Bashes", 
-    "Fashion Shows", "Exhibitions"
-  ];
+const GALLERY_IMAGES = [
+  { gradient: "linear-gradient(135deg,#1a0a00,#3d1500)", label: "Corporate Night" },
+  { gradient: "linear-gradient(135deg,#001a1a,#003d3d)", label: "College Fest" },
+  { gradient: "linear-gradient(135deg,#1a001a,#3d003d)", label: "Wedding Ceremony" },
+  { gradient: "linear-gradient(135deg,#0a1a00,#1e3d00)", label: "Birthday Bash" },
+  { gradient: "linear-gradient(135deg,#00001a,#00003d)", label: "Award Night" },
+  { gradient: "linear-gradient(135deg,#1a0a0a,#3d1a1a)", label: "Product Launch" },
+  { gradient: "linear-gradient(135deg,#0a0a1a,#1a1a3d)", label: "Photo Shoot" },
+  { gradient: "linear-gradient(135deg,#1a1a00,#3d3d00)", label: "Cultural Event" },
+];
 
-  const companyLinks = [
-    "About Us", "Meet The Founder", "Our Process", 
-    "Event Gallery", "Inquiry Form", "Contact Us", 
-    "Privacy Policy", "Terms of Service"
-  ];
+const NAV_LINKS = ["Home","About Us","Services","Gallery","Enquiry","Contact Us"];
+const SERVICES  = ["Wedding Planning","Corporate Events","College Fests","Birthday Events","Photo Shoots","Cultural Events"];
+
+export default function Footer() {
+  const [activeImg, setActiveImg] = useState(2); // center card active
+  const [scrollY, setScrollY]     = useState(0);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Auto-rotate gallery active card every 4s
+  useEffect(() => {
+    const t = setInterval(() => {
+      setActiveImg(p => (p + 1) % GALLERY_IMAGES.length);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
-    <footer className="bg-gray-900 text-white pt-20 pb-10 font-sans">
-      <div className="max-w-7xl mx-auto px-6">
-        
-        {/* --- Top Section: Newsletter & Branding --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-gray-800">
-          <div className="lg:col-span-5">
-            <h2 className="text-3xl font-black italic tracking-tighter mb-6">
-              DREAMBRIGHT <span className="text-blue-500">INDIA.</span>
-            </h2>
-            <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-md">
-              Illuminating your dreams with world-class innovation and precision. 
-              The powerhouse of event production in South India.
-            </p>
-            <div className="flex gap-4">
-              {[Instagram, Facebook, Youtube, Twitter, Linkedin].map((Icon, idx) => (
-                <a key={idx} href="#" className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-all duration-300">
-                  <Icon size={20} />
-                </a>
-              ))}
-            </div>
-          </div>
+    <>
+      {/* ── INSTAGRAM GALLERY SECTION ──────────────────────────── */}
+      <section ref={sectionRef} style={{ background: "#030303", paddingTop: "100px", overflow: "hidden", position: "relative" }}>
 
-          <div className="lg:col-span-7 bg-gray-800/50 p-8 rounded-3xl border border-gray-700">
-            <h3 className="text-xl font-bold mb-2">Subscribe to our Event Journal</h3>
-            <p className="text-gray-400 text-sm mb-6">Get exclusive insights into our latest high-production sets and event trends.</p>
-            <form className="flex flex-col sm:flex-row gap-4" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-6 py-4 outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-              />
-              <button className="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-                SUBSCRIBE <Send size={18} />
-              </button>
-            </form>
+        {/* Subtle top gradient */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "120px",
+          background: "linear-gradient(to bottom, #030303, transparent)", zIndex: 2, pointerEvents: "none" }} />
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "48px", position: "relative", zIndex: 2 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "16px" }}>
+            <span style={{ width: "40px", height: "1px", background: "linear-gradient(to right, transparent, #C9A84C)" }} />
+            <span style={{ fontFamily: "'Cinzel',serif", fontSize: "10px", letterSpacing: "6px", color: "#C9A84C", textTransform: "uppercase" }}>
+              📷 Our Portfolio
+            </span>
+            <span style={{ width: "40px", height: "1px", background: "linear-gradient(to left, transparent, #C9A84C)" }} />
           </div>
+          <h2 style={{
+            fontFamily: "'Cinzel',serif", fontWeight: 900,
+            fontSize: "clamp(26px,4vw,54px)", color: "#fff", lineHeight: 1.1,
+          }}>
+            Moments We've{" "}
+            <span style={{
+              background: "linear-gradient(90deg,#C9A84C,#F5D98B,#C9A84C)", backgroundSize: "200%",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              animation: "shimmer 3s linear infinite",
+            }}>Crafted</span>
+          </h2>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{
+            display: "inline-flex", alignItems: "center", gap: "10px",
+            marginTop: "20px",
+            padding: "12px 28px",
+            background: "linear-gradient(135deg,#C9A84C,#F5D98B)",
+            fontFamily: "'Cinzel',serif", fontSize: "10px",
+            letterSpacing: "3px", textTransform: "uppercase",
+            fontWeight: 700, color: "#000", textDecoration: "none",
+            clipPath: "polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)",
+            transition: "all 0.3s ease",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(201,168,76,0.4)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+          >
+            📷 Follow Us On Instagram
+          </a>
         </div>
 
-        {/* --- Middle Section: Quick Links Grid --- */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-12 py-16">
-          <div className="lg:col-span-3">
-            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-blue-500 mb-8">Our Services</h4>
-            <ul className="space-y-4">
-              {serviceLinks.map((item, idx) => (
-                <li key={idx}>
-                  <a href="#" className="text-gray-400 hover:text-white flex items-center gap-2 group transition-colors">
-                    <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Rotating gallery cards - cinema-strip layout */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: "12px", padding: "0 0 60px 0",
+          position: "relative", zIndex: 1,
+          overflowX: "hidden",
+        }}>
+          {GALLERY_IMAGES.map((img, i) => {
+            const isCenter  = i === activeImg;
+            const isAdjacent = Math.abs(i - activeImg) === 1 || (activeImg === 0 && i === GALLERY_IMAGES.length - 1) || (activeImg === GALLERY_IMAGES.length - 1 && i === 0);
+            const scale = isCenter ? 1.18 : isAdjacent ? 0.92 : 0.78;
+            const opacity = isCenter ? 1 : isAdjacent ? 0.65 : 0.35;
+            const zIndex = isCenter ? 10 : isAdjacent ? 5 : 1;
 
-          <div className="lg:col-span-3">
-            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-blue-500 mb-8">Company</h4>
-            <ul className="space-y-4">
-              {companyLinks.map((item, idx) => (
-                <li key={idx}>
-                  <a href="#" className="text-gray-400 hover:text-white flex items-center gap-2 group transition-colors">
-                    <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-6 space-y-8">
-            <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-blue-500 mb-8">Official HQ</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <MapPin className="text-blue-500 shrink-0" size={24} />
-                  <p className="text-gray-400 leading-relaxed">
-                    Dreambright Arena, Plot 45, <br />
-                    Industrial Tech Park, South India, <br />
-                    PIN: 600001
-                  </p>
+            return (
+              <div
+                key={i}
+                onClick={() => setActiveImg(i)}
+                style={{
+                  flexShrink: 0,
+                  width: isCenter ? "280px" : "200px",
+                  height: isCenter ? "340px" : "260px",
+                  background: img.gradient,
+                  /* swap: backgroundImage: `url(${img.image})`, backgroundSize:"cover", backgroundPosition:"center" */
+                  border: isCenter ? "2px solid rgba(201,168,76,0.7)" : "1px solid rgba(255,255,255,0.08)",
+                  cursor: "pointer",
+                  transform: `scale(${scale})`,
+                  opacity,
+                  zIndex,
+                  transition: "all 0.6s cubic-bezier(0.22,1,0.36,1)",
+                  boxShadow: isCenter ? "0 20px 60px rgba(201,168,76,0.3), 0 0 0 1px rgba(201,168,76,0.3)" : "none",
+                  position: "relative",
+                  display: "flex", alignItems: "flex-end",
+                }}
+              >
+                {/* Image placeholder */}
+                <div style={{
+                  position: "absolute", inset: 0,
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center",
+                  gap: "8px",
+                }}>
+                  <div style={{ fontSize: isCenter ? "36px" : "24px" }}>🎪</div>
+                  <div style={{
+                    fontFamily: "'Cinzel',serif", fontSize: "8px",
+                    letterSpacing: "2px", color: "rgba(201,168,76,0.6)",
+                    textTransform: "uppercase",
+                  }}>{img.label}</div>
+                  {isCenter && <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "11px", color: "rgba(255,255,255,0.3)", fontStyle: "italic" }}>← Add your photo</div>}
                 </div>
-                <div className="flex items-center gap-4">
-                  <Phone className="text-blue-500 shrink-0" size={20} />
-                  <p className="text-gray-400">+91 90000 12345</p>
+
+                {/* Gradient overlay on bottom */}
+                <div style={{
+                  position: "absolute", bottom: 0, left: 0, right: 0, height: "60%",
+                  background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)",
+                }} />
+
+                {/* Label */}
+                <div style={{
+                  position: "relative", zIndex: 1,
+                  padding: "12px 14px",
+                  fontFamily: "'Cinzel',serif", fontSize: "9px",
+                  letterSpacing: "2px", color: isCenter ? "#C9A84C" : "rgba(255,255,255,0.4)",
+                  textTransform: "uppercase", transition: "color 0.4s ease",
+                  width: "100%",
+                }}>{img.label}</div>
+
+                {/* Active indicator dot */}
+                {isCenter && (
+                  <div style={{
+                    position: "absolute", top: "12px", right: "12px",
+                    width: "10px", height: "10px", borderRadius: "50%",
+                    background: "#C9A84C",
+                    boxShadow: "0 0 12px #C9A84C",
+                    animation: "pulseGlow 1.5s ease infinite",
+                  }} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress dots */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px", paddingBottom: "80px" }}>
+          {GALLERY_IMAGES.map((_, i) => (
+            <button key={i} onClick={() => setActiveImg(i)} style={{
+              width: i === activeImg ? "24px" : "8px", height: "8px",
+              borderRadius: "4px", border: "none", cursor: "pointer",
+              background: i === activeImg ? "linear-gradient(90deg,#C9A84C,#F5D98B)" : "rgba(255,255,255,0.15)",
+              transition: "all 0.4s ease",
+            }} />
+          ))}
+        </div>
+
+        {/* Parent company banner */}
+        <div style={{
+          borderTop: "1px solid rgba(201,168,76,0.1)",
+          borderBottom: "1px solid rgba(201,168,76,0.1)",
+          padding: "28px 24px",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: "24px",
+          background: "rgba(201,168,76,0.02)",
+        }}>
+          <div style={{
+            width: "64px", height: "64px", borderRadius: "50%",
+            border: "1px solid rgba(201,168,76,0.4)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "24px",
+            background: "rgba(201,168,76,0.05)",
+          }}>🌟</div>
+          <div style={{ borderLeft: "1px solid rgba(201,168,76,0.3)", paddingLeft: "24px" }}>
+            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontStyle: "italic", fontSize: "13px", color: "rgba(255,255,255,0.4)", letterSpacing: "2px" }}>A Unit Of</div>
+            <div style={{
+              fontFamily: "'Cinzel',serif", fontWeight: 900,
+              fontSize: "clamp(16px,2.5vw,28px)",
+              background: "linear-gradient(90deg,#C9A84C,#F5D98B,#C9A84C)", backgroundSize: "200%",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              animation: "shimmer 3s linear infinite",
+              letterSpacing: "2px",
+            }}>CANA GROUP OF COMPANIES</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      <footer style={{ background: "#030303", borderTop: "1px solid rgba(201,168,76,0.12)", padding: "72px 24px 0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: "48px", paddingBottom: "64px" }}
+            className="footer-grid">
+
+            {/* Brand column */}
+            <div>
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{
+                  fontFamily: "'Cinzel',serif", fontSize: "28px", fontWeight: 900,
+                  letterSpacing: "4px",
+                  background: "linear-gradient(135deg,#C9A84C,#F5D98B,#C9A84C)",
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                  display: "inline-block",
+                  border: "1px solid rgba(201,168,76,0.3)",
+                  padding: "8px 16px",
+                }}>CANA</div>
+                <div style={{ fontFamily: "'Cinzel',serif", fontSize: "9px", letterSpacing: "4px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginTop: "4px" }}>
+                  Event Management
                 </div>
               </div>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Mail className="text-blue-500 shrink-0" size={20} />
-                  <p className="text-gray-400">hello@dreambrightindia.com</p>
-                </div>
-                <div className="bg-gray-800 p-4 rounded-2xl flex items-center gap-3">
-                  <ShieldCheck className="text-emerald-500" size={24} />
-                  <p className="text-xs text-gray-400">ISO 9001:2015 Certified Production House</p>
-                </div>
+              <p style={{
+                fontFamily: "'Cormorant Garamond',serif", fontStyle: "italic",
+                fontSize: "14px", color: "rgba(255,255,255,0.4)", lineHeight: 1.9, marginBottom: "28px",
+              }}>
+                Crafting extraordinary events with passion, precision and unmatched creativity since 2019.
+              </p>
+              <div style={{ display: "flex", gap: "10px" }}>
+                {[["📸","Instagram"],["👤","Facebook"],["▶","YouTube"],["💬","WhatsApp"]].map(([icon, label]) => (
+                  <a key={label} href="#" title={label} style={{
+                    width: "38px", height: "38px", borderRadius: "50%",
+                    border: "1px solid rgba(201,168,76,0.25)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "15px", textDecoration: "none",
+                    transition: "all 0.3s ease",
+                    background: "rgba(201,168,76,0.03)",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(201,168,76,0.15)"; e.currentTarget.style.borderColor = "#C9A84C"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(201,168,76,0.03)"; e.currentTarget.style.borderColor = "rgba(201,168,76,0.25)"; e.currentTarget.style.transform = "none"; }}
+                  >{icon}</a>
+                ))}
               </div>
             </div>
+
+            {/* Navigation */}
+            <div>
+              <h4 style={{ fontFamily: "'Cinzel',serif", fontSize: "11px", letterSpacing: "4px", color: "#C9A84C", textTransform: "uppercase", marginBottom: "24px", paddingBottom: "12px", borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
+                Navigation
+              </h4>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+                {NAV_LINKS.map(link => (
+                  <li key={link}>
+                    <a href={`#${link.toLowerCase().replace(" ","-")}`} style={{
+                      fontFamily: "'Cormorant Garamond',serif", fontSize: "15px",
+                      color: "rgba(255,255,255,0.45)", textDecoration: "none",
+                      display: "flex", alignItems: "center", gap: "8px",
+                      transition: "all 0.3s ease",
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.color = "#C9A84C"; e.currentTarget.style.paddingLeft = "6px"; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.45)"; e.currentTarget.style.paddingLeft = "0"; }}
+                    >
+                      <span style={{ width: "12px", height: "1px", background: "rgba(201,168,76,0.4)", flexShrink: 0 }} />
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Services */}
+            <div>
+              <h4 style={{ fontFamily: "'Cinzel',serif", fontSize: "11px", letterSpacing: "4px", color: "#C9A84C", textTransform: "uppercase", marginBottom: "24px", paddingBottom: "12px", borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
+                Our Services
+              </h4>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
+                {SERVICES.map(svc => (
+                  <li key={svc}>
+                    <a href="#services" style={{
+                      fontFamily: "'Cormorant Garamond',serif", fontSize: "15px",
+                      color: "rgba(255,255,255,0.45)", textDecoration: "none",
+                      display: "flex", alignItems: "center", gap: "8px",
+                      transition: "all 0.3s ease",
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.color = "#C9A84C"; e.currentTarget.style.paddingLeft = "6px"; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.45)"; e.currentTarget.style.paddingLeft = "0"; }}
+                    >
+                      <span style={{ width: "12px", height: "1px", background: "rgba(201,168,76,0.4)", flexShrink: 0 }} />
+                      {svc}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact info */}
+            <div>
+              <h4 style={{ fontFamily: "'Cinzel',serif", fontSize: "11px", letterSpacing: "4px", color: "#C9A84C", textTransform: "uppercase", marginBottom: "24px", paddingBottom: "12px", borderBottom: "1px solid rgba(201,168,76,0.15)" }}>
+                Contact Info
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                {[
+                  { icon: "📍", text: "No. 7A, Sundaramoorthy Street, Jafferkhanpet, Chennai – 600 083" },
+                  { icon: "📞", text: "+91 98765 43210", href: "tel:+919876543210" },
+                  { icon: "✉️", text: "hello@canaeventmanagement.in", href: "mailto:hello@canaeventmanagement.in" },
+                ].map(({ icon, text, href }) => (
+                  <div key={text} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                    <span style={{ fontSize: "15px", flexShrink: 0, marginTop: "2px" }}>{icon}</span>
+                    {href ? (
+                      <a href={href} style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "14px", color: "rgba(255,255,255,0.45)", textDecoration: "none", lineHeight: 1.6, transition: "color 0.3s" }}
+                        onMouseEnter={e => e.currentTarget.style.color = "#C9A84C"}
+                        onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.45)"}
+                      >{text}</a>
+                    ) : (
+                      <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{text}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
 
-        {/* --- Bottom Section: Copyright & Signature --- */}
-        <div className="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-          <p className="text-gray-500 text-sm">
-            © {currentYear} Dreambright India. All Rights Reserved. <br className="md:hidden" />
-            Designed with Innovation & Passion.
-          </p>
-          <div className="text-gray-500 text-xs font-black uppercase tracking-[0.5em] opacity-50">
-            " THE POWER OF PRODUCTION "
-          </div>
+        {/* Bottom bar */}
+        <div style={{
+          borderTop: "1px solid rgba(201,168,76,0.08)",
+          padding: "20px 24px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexWrap: "wrap", gap: "12px",
+          maxWidth: "1200px", margin: "0 auto",
+        }}>
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "13px", color: "rgba(255,255,255,0.25)", fontStyle: "italic" }}>
+            © 2025 Cana Event Management. All rights reserved.
+          </span>
+          <span style={{ fontFamily: "'Cinzel',serif", fontSize: "9px", letterSpacing: "3px", color: "rgba(201,168,76,0.35)", textTransform: "uppercase" }}>
+            Crafted with ✦ by Cana Dev Team
+          </span>
         </div>
+      </footer>
 
-      </div>
-    </footer>
+      <style>{`
+        @keyframes shimmer   { 0%{background-position:-200% center} 100%{background-position:200% center} }
+        @keyframes pulseGlow { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
+        @media(max-width:768px){
+          .footer-grid{ grid-template-columns: 1fr 1fr !important; }
+        }
+        @media(max-width:480px){
+          .footer-grid{ grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </>
   );
-};
-
-export default Footer;
+}

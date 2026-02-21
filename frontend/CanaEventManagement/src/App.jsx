@@ -1,50 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import AboutUs from './components/AboutUs';
-import FounderProfile from './components/FounderProfile';
-import WhatWeDo from './components/WhatWeDo';
-import EnquiryPage from './components/EnquiryPage';
-import ContactPage from './components/ContactPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import HomePage from './components/HomePage';
 import ScrollToTop from './components/ScrollToTop';
-function App() {
-  const [count, setCount] = useState(0)
 
+// ── Your Home page sections ──────────────────────────────────
+import HeroSection     from './components/Herosection';
+import AboutSection    from './components/AboutSection';
+import StatsSection    from './components/StatsSection';
+import WorkflowSection from './components/WorkflowSection';
+import ClientsSection  from './components/ClientsSection';
+import ContactSection  from './components/ContactSection';
+import Footer          from './components/Footer';
+
+// ── Your friend's pages ──────────────────────────────────────
+import AboutUs         from './components/AboutUs';
+import WhatWeDo        from './components/WhatWeDo';
+import FounderProfile  from './components/FounderProfile';
+import EnquiryPage     from './components/EnquiryPage';
+import ContactPage     from './components/ContactPage';
+
+// ── Full Home page ───────────────────────────────────────────
+function HomePage() {
   return (
     <>
-      <ScrollToTop />
-      <div className="flex flex-col min-h-screen">
-        {/* Floating Navbar - Stays visible on all pages */}
-        <Navbar />
-
-        {/* Main Content Area */}
-        <main className="flex-grow">
-          <Routes>
-            {/* Default Route: Redirects to Home */}
-            <Route path="/" element={<Navigate to="/home" />} />
-            
-            {/* Individual Component Routes */}
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/founder" element={<FounderProfile />} />
-            <Route path="/services" element={<WhatWeDo />} />
-            <Route path="/enquiry" element={<EnquiryPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-
-            {/* Fallback for 404 - Redirect to Home */}
-            <Route path="*" element={<Navigate to="/home" />} />
-          </Routes>
-        </main>
-
-        {/* Footer - Stays at the bottom of all pages */}
-        <Footer />
-      </div>
+      <HeroSection />
+      <AboutSection />
+      <StatsSection />
+      <WorkflowSection />
+      <ClientsSection />
+      <ContactSection />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+// ── App with routing ─────────────────────────────────────────
+export default function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <Navbar />
+      <Routes>
+        <Route path="/"          element={<HomePage />} />
+        <Route path="/about"     element={<AboutUs />} />
+        <Route path="/founder"   element={<FounderProfile />} />
+        <Route path="/what-we-do" element={<WhatWeDo />} />
+        <Route path="/enquiry"   element={<EnquiryPage />} />
+        <Route path="/contact"   element={<ContactPage />} />
+      </Routes>
+    </Router>
+  );
+}

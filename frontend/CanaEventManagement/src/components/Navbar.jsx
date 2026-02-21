@@ -1,112 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-// If you want smooth scrolling automatically, 'react-router-hash-link' is recommended,
-// but here is the version using the standard React Router Link as requested.
-import { Menu, X, Sparkles, Send } from 'lucide-react';
+import { useState, useEffect } from "react";
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "About Us", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Enquiry", href: "#enquiry" },
+  { label: "Contact Us", href: "#contact" },
+];
+
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("Home");
 
-  // Monitors scroll to toggle glassmorphism intensity
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Section names mapped to the IDs in your App.js
-  const navLinks = [
-    { name: 'Home', to: '/home' },
-    { name: 'About Us', to: '/about' },
-    { name: 'The Founder', to: '/founder' },
-    { name: 'What We Do', to: '/services' },
-    { name: 'Contact Us', to: '/contact' },
-  ];
-
   return (
-    <nav className="fixed w-full z-50 top-6 px-4 md:px-10">
-      {/* Floating Glassmorphism Container */}
-      <div className={`mx-auto max-w-7xl transition-all duration-500 rounded-full border border-white/20 
-        ${scrolled ? 'bg-white/70 backdrop-blur-lg shadow-2xl py-3' : 'bg-white/40 backdrop-blur-md py-5'}`}>
-        
-        <div className="flex items-center justify-between px-8">
-          
-          {/* Logo with Link to Top */}
-          <Link 
-            to="/home" 
-            className="flex items-center gap-2 group cursor-pointer"
-            onClick={() => setIsOpen(false)}
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-black/95 backdrop-blur-md shadow-[0_2px_30px_rgba(201,168,76,0.15)]"
+          : "bg-black/60 backdrop-blur-sm"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="#home" className="flex flex-col leading-tight group">
+          <span
+            className="text-2xl font-black tracking-widest uppercase"
+            style={{
+              fontFamily: "'Cinzel', serif",
+              background: "linear-gradient(135deg, #C9A84C 0%, #F5D98B 50%, #C9A84C 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textShadow: "none",
+            }}
           >
-            <div className="bg-blue-600 p-2 rounded-lg group-hover:rotate-12 transition-transform">
-              <Sparkles className="text-white w-5 h-5" />
-            </div>
-            <span className="font-black text-xl tracking-tighter text-gray-900">
-              DREAM<span className="text-blue-600">BRIGHT</span>
-            </span>
-          </Link>
+            CANA
+          </span>
+          <span className="text-white text-[10px] tracking-[4px] uppercase font-light opacity-80 group-hover:opacity-100 transition-opacity">
+            Event Management
+          </span>
+        </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.to}
-                className="text-sm font-bold uppercase tracking-widest text-gray-700 hover:text-blue-600 transition-colors"
+        {/* Desktop Nav */}
+        <ul className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                onClick={() => setActive(link.label)}
+                className={`text-sm tracking-widest uppercase font-medium transition-all duration-300 relative group ${
+                  active === link.label ? "text-amber-400" : "text-gray-300 hover:text-amber-400"
+                }`}
+                style={{ fontFamily: "'Cinzel', serif", fontSize: "11px" }}
               >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+                {link.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-[1px] bg-amber-400 transition-all duration-300 ${
+                    active === link.label ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
 
-          {/* Call to Action Link */}
-          <div className="hidden md:block">
-            <Link 
-              to="/enquiry"
-              className="bg-black text-white px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center gap-2 shadow-lg"
-            >
-              Enquire Now <Send size={14} />
-            </Link>
-          </div>
+        {/* CTA Button */}
+        <a
+          href="tel:+919876543210"
+          className="hidden md:flex items-center gap-2 px-5 py-2.5 text-xs tracking-widest uppercase font-semibold text-black transition-all duration-300 hover:scale-105"
+          style={{
+            background: "linear-gradient(135deg, #C9A84C 0%, #F5D98B 50%, #C9A84C 100%)",
+            fontFamily: "'Cinzel', serif",
+            clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)",
+          }}
+        >
+          📞 Call Us
+        </a>
 
-          {/* Mobile Toggle */}
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-gray-900 p-2 focus:outline-none">
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-        </div>
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden flex flex-col gap-1.5 p-2"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <div className="md:hidden absolute top-20 left-4 right-4 bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-gray-100 animate-in fade-in zoom-in duration-300">
-          <div className="flex flex-col gap-6 text-center">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.to}
-                onClick={() => setIsOpen(false)}
-                className="text-lg font-black uppercase tracking-widest text-gray-900 hover:text-blue-600 transition-colors"
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden transition-all duration-500 overflow-hidden bg-black/98 backdrop-blur-xl border-t border-amber-400/20 ${
+          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <ul className="flex flex-col px-6 py-4 gap-4">
+          {navLinks.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                onClick={() => { setActive(link.label); setMenuOpen(false); }}
+                className="text-gray-300 hover:text-amber-400 transition-colors text-sm tracking-widest uppercase"
+                style={{ fontFamily: "'Cinzel', serif", fontSize: "11px" }}
               >
-                {link.name}
-              </Link>
-            ))}
-            <hr className="border-gray-100" />
-            <Link 
-              to="/enquiry"
-              onClick={() => setIsOpen(false)}
-              className="bg-blue-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest block"
-            >
-              Get Started
-            </Link>
-          </div>
-        </div>
-      )}
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="tel:+919876543210" className="text-amber-400 text-sm font-semibold tracking-widest">
+              📞 Call Us
+            </a>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
