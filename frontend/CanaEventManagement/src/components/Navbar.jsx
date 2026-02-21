@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom"; // Import necessary hooks
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Enquiry", href: "#enquiry" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Services", href: "/what-we-do" },
+  { label: "Founder", href: "/founder" },
+  { label: "Enquiry", href: "/enquiry" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState("Home");
+  const location = useLocation(); // Gets the current route path
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -30,7 +31,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#home" className="flex flex-col leading-tight group">
+        <Link to="/" className="flex flex-col leading-tight group">
           <span
             className="text-2xl font-black tracking-widest uppercase"
             style={{
@@ -47,27 +48,26 @@ export default function Navbar() {
           <span className="text-white text-[10px] tracking-[4px] uppercase font-light opacity-80 group-hover:opacity-100 transition-opacity">
             Event Management
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <ul className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <li key={link.label}>
-              <a
-                href={link.href}
-                onClick={() => setActive(link.label)}
+              <Link
+                to={link.href}
                 className={`text-sm tracking-widest uppercase font-medium transition-all duration-300 relative group ${
-                  active === link.label ? "text-amber-400" : "text-gray-300 hover:text-amber-400"
+                  location.pathname === link.href ? "text-amber-400" : "text-gray-300 hover:text-amber-400"
                 }`}
                 style={{ fontFamily: "'Cinzel', serif", fontSize: "11px" }}
               >
                 {link.label}
                 <span
                   className={`absolute -bottom-1 left-0 h-[1px] bg-amber-400 transition-all duration-300 ${
-                    active === link.label ? "w-full" : "w-0 group-hover:w-full"
+                    location.pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
                   }`}
                 />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -90,7 +90,7 @@ export default function Navbar() {
           className="md:hidden flex flex-col gap-1.5 p-2"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2.5" : ""}`} />
           <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
           <span className={`block w-6 h-0.5 bg-amber-400 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
         </button>
@@ -105,14 +105,16 @@ export default function Navbar() {
         <ul className="flex flex-col px-6 py-4 gap-4">
           {navLinks.map((link) => (
             <li key={link.label}>
-              <a
-                href={link.href}
-                onClick={() => { setActive(link.label); setMenuOpen(false); }}
-                className="text-gray-300 hover:text-amber-400 transition-colors text-sm tracking-widest uppercase"
+              <Link
+                to={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`transition-colors text-sm tracking-widest uppercase ${
+                  location.pathname === link.href ? "text-amber-400" : "text-gray-300 hover:text-amber-400"
+                }`}
                 style={{ fontFamily: "'Cinzel', serif", fontSize: "11px" }}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
