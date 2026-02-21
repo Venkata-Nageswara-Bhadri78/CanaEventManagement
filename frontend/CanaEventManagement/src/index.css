@@ -1,1 +1,112 @@
 @import "tailwindcss";
+/* ════════════════════════════════════════════════════════════
+   CANA EVENT MANAGEMENT — Global Animations
+   Add these to your src/index.css (after @tailwind directives)
+   ════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: #030303; overflow-x: hidden; margin: 0; padding: 0; }
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes kenBurns {
+  0%   { transform: scale(1.04) translateX(0px); }
+  100% { transform: scale(1.12) translateX(-16px); }
+}
+
+@keyframes titleSlideUp {
+  0%   { opacity: 0; transform: translateY(32px) skewY(1.5deg); }
+  100% { opacity: 1; transform: translateY(0px) skewY(0deg); }
+}
+
+@keyframes titleSlideDown {
+  0%   { opacity: 1; transform: translateY(0px); }
+  100% { opacity: 0; transform: translateY(-28px); }
+}
+
+@keyframes fadeInUp {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+
+@keyframes socialFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes floatTag {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes pulseGold {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* ── Utility classes ────────────────────────────────────────── */
+
+.title-enter { animation: titleSlideUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards; }
+.title-exit  { animation: titleSlideDown 0.5s ease-in forwards; }
+
+/* CTA buttons */
+.cta-gold {
+  display: inline-flex; align-items: center; gap: 8px;
+  position: relative; overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.cta-gold::before {
+  content: ''; position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.5s ease;
+}
+.cta-gold:hover::before { left: 100%; }
+.cta-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,168,76,0.4); }
+
+.cta-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.cta-outline:hover {
+  background: rgba(201,168,76,0.08) !important;
+  transform: translateY(-2px);
+}
+
+/* About pillar card hover */
+.pillar-card:hover { background: rgba(201,168,76,0.06) !important; }
+.pillar-card:hover .pillar-corner { opacity: 1 !important; }
+
+/* About button hover */
+.about-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 32px rgba(201,168,76,0.4) !important;
+}
+
+/* Responsive About grid */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+}

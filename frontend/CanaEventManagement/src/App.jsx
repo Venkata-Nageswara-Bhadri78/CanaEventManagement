@@ -1,14 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Navbar          from './components/Navbar'
+import HeroSection     from './components/Herosection'
+import AboutSection    from './components/AboutSection'
+import StatsSection    from './components/StatsSection'
+import WorkflowSection from './components/WorkflowSection'
+import ClientsSection  from './components/ClientsSection'
+import ContactSection  from './components/ContactSection'
+import Footer          from './components/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-    <h1 className='text-green-500'>CanaEventManagement</h1>
-    </>
+    <div>
+      <Navbar />
+      <HeroSection />
+      <AboutSection />
+      <StatsSection />
+      <WorkflowSection />
+      <ClientsSection />
+      <ContactSection />
+      <Footer />
+    </div>
   )
 }
 
